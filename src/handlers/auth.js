@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 // This policy will authorize all requests to the same API Gateway instance where the
 // request is coming from, thus being efficient and optimising costs.
 const generatePolicy = (principalId, methodArn) => {
+  // Creating resource address with functions/* to all the lambdas.
   const apiGatewayWildcard = methodArn.split('/', 2).join('/') + '/*';
 
   return {
@@ -34,6 +35,7 @@ export async function handler(event, context) {
 
     return {
       ...policy,
+      // claims ie. username, useremail
       context: claims
     };
   } catch (error) {

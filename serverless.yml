@@ -1,6 +1,6 @@
 
 service:
-  name: serverless-auth0-authorizer
+  name: auth-service
 
 plugins:
   - serverless-bundle
@@ -9,6 +9,8 @@ provider:
   name: aws
   runtime: nodejs12.x
   memorySize: 128
+  region: 'ap-south-1'
+  stage: ${opt:stage, 'dev'}
   environment:
     AUTH0_PUBLIC_KEY: ${file(secret.pem)}
 
@@ -16,6 +18,7 @@ functions:
   auth:
     handler: src/handlers/auth.handler
     cors: true
+  # A public teseting endpoint whithout authontication, we cand deleete below public and private endpoint
   publicEndpoint:
     handler: src/handlers/public.handler
     events:
@@ -23,6 +26,7 @@ functions:
           path: public
           method: POST
           cors: true
+  # A private teseting endpoint which requires authontication
   privateEndpoint:
     handler: src/handlers/private.handler
     events:
